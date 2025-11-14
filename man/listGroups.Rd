@@ -27,8 +27,8 @@ genomes per group. Only available for \code{db = "refseq"} and
 }
 \examples{
 \dontrun{
-# retrieve a list of available kingdoms
-getKingdoms()
+# retrieve a list of available kingdoms for RefSeq
+getKingdoms(db = "refseq")
 # [1] "archaea"              "bacteria"             "fungi"                "invertebrate"         "plant"               
 # [6] "protozoa"             "vertebrate_mammalian" "vertebrate_other"     "viral"  
 # example for refseq

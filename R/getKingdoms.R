@@ -23,7 +23,7 @@ getKingdoms <- function(db = "refseq") {
              'genbank', 'ensembl', or 'ensemblgenomes'.", call. = FALSE)
 
   if (db %in% c("refseq", "genbank")) {
-    return(getKingdomsNCBI(db))
+    return(getKingdomsNCBI(db = db))
   }
 
   return(getKingdomEnsembl())

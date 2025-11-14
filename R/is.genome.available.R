@@ -104,7 +104,7 @@ is.genome.available.refseq.genbank <- function(db = "refseq",
   }
 
   if (nrow(FoundOrganism) == 0) {
-    organism_no_hit_message_zero(organism, db)
+    organism_no_hit_message_zero(organism, db = db)
     return(FALSE)
   }
 
@@ -119,7 +119,7 @@ is.genome.available.refseq.genbank <- function(db = "refseq",
       }
 
       if (nrow(FoundOrganism) > 1) {
-        organism_no_hit_message_more_than_one(organism, db)
+        organism_no_hit_message_more_than_one(organism, db = db)
       }
       return(TRUE)
     }
@@ -171,13 +171,13 @@ is.genome.available.ensembl <- function(db = "ensembl", organism,
 
   if (!details) {
     if (nrow(selected.organism) == 0) {
-      organism_no_hit_message_zero(organism, db)
+      organism_no_hit_message_zero(organism, db = db)
       return(FALSE)
     }
     if (nrow(selected.organism) > 0) {
       message("A reference or representative genome assembly is available for '", organism, "'.")
       if (nrow(selected.organism) > 1) {
-        organism_no_hit_message_more_than_one(organism, db)
+        organism_no_hit_message_more_than_one(organism, db = db)
       }
       return(TRUE)
     }
@@ -237,7 +237,7 @@ is.genome.available.uniprot <- function(db = "uniprot",
 
   if (!details) {
     if (nrow(uniprot_species_info) == 0) {
-      organism_no_hit_message_zero(organism, db)
+      organism_no_hit_message_zero(organism, db = db)
       return(FALSE)
     }
 
@@ -248,7 +248,7 @@ is.genome.available.uniprot <- function(db = "uniprot",
         "'."
       )
       if (nrow(uniprot_species_info) > 1) {
-        organism_no_hit_message_more_than_one(organism, db)
+        organism_no_hit_message_more_than_one(organism, db = db)
       }
       return(TRUE)
     }

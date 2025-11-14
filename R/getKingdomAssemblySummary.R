@@ -33,8 +33,8 @@ getKingdomAssemblySummary <- function(db, skip_bacteria = TRUE,
     if (is.element(db, c("refseq", "genbank"))) {
         # if AssemblyFilesAllKingdoms.txt file was already generated/downloaded
         # then use the local version stored in temp()
-        if (file.exists(file) & (skip_bacteria | file.exists(assemblies_info_path(db, "bacteria")))) {
-          AssemblyFilesAllKingdoms <- read_all_kingdoms_assemblies_info_fast(file)
+        if (file.exists(file) & (skip_bacteria | file.exists(assemblies_info_path(db = db, "bacteria")))) {
+          AssemblyFilesAllKingdoms <- read_all_kingdoms_assemblies_info(file = file)
         } else {
             # otherwise download all assembly_summary.txt files for all kingdoms
             # and store the AssemblyFilesAllKingdoms.txt file locally
