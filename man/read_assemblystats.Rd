@@ -4,7 +4,7 @@
 \alias{read_assemblystats}
 \title{Import Genome Assembly Stats File}
 \usage{
-read_assemblystats(file, type = "raw")
+read_assemblystats(file, type = "raw", organism = NULL)
 }
 \arguments{
 \item{file}{a character string specifying the path to the file storing
@@ -13,6 +13,9 @@ the Genome Assembly Stats file.}
 \item{type}{a tibble object, either \code{type = "raw"} to import the entire genome assembly
 stats file or \code{type = "stats"} to import overall statistics including
 all chromosomes, mitochondria and plastids.}
+
+\item{organism}{character, if not NULL, appends a column left side called 'species'
+with this value.}
 }
 \description{
 This function reads an organism specific Genome Assembly

@@ -1,24 +1,24 @@
 #' @title List number of available genomes in each taxonomic group
-#' @description Users can retrieve the available number of sequenced 
-#' genomes per group. Only available for \code{db = "refseq"} and 
+#' @description Users can retrieve the available number of sequenced
+#' genomes per group. Only available for \code{db = "refseq"} and
 #' \code{db = "genbank"}.
-#' @param db a character string specifying the database for which genome 
+#' @param db a character string specifying the database for which genome
 #' availability shall be checked. Available options are:
 #' \itemize{
-#' \item \code{db = "refseq"} 
+#' \item \code{db = "refseq"}
 #' \item \code{db = "genbank"}
 #' }
-#' @param kingdom a kingdom specification retrieved by 
+#' @param kingdom a kingdom specification retrieved by
 #' \code{\link{getKingdoms}}.
-#' @param details shall all species corresponding to the specified 
+#' @param details shall all species corresponding to the specified
 #' \code{kingdom} be returned? Default is \code{details = FALSE}.
 #' @author Hajk-Georg Drost
 #' @examples
 #' \dontrun{
 #' # retrieve a list of available kingdoms
 #' getKingdoms()
-#' # [1] "archaea"              "bacteria"             "fungi"                "invertebrate"         "plant"               
-#' # [6] "protozoa"             "vertebrate_mammalian" "vertebrate_other"     "viral"  
+#' # [1] "archaea"  "bacteria"  "fungi"  "invertebrate"  "plant"
+#' # [6] "protozoa"  "vertebrate_mammalian" "vertebrate_other"  "viral"
 #' # example for refseq
 #' listGroups(db = "refseq")
 #' # example for genbank
@@ -31,7 +31,7 @@
 #' # or
 #' listGroups(db = "genbank", kingdom = "bacteria")
 #' }
-#' @seealso \code{\link{listGenomes}}, \code{\link{is.genome.available}}, 
+#' @seealso \code{\link{listGenomes}}, \code{\link{is.genome.available}},
 #' \code{\link{listKingdoms}}
 #' @export
 
@@ -40,25 +40,25 @@ listGroups <-
              kingdom = "all",
              details = FALSE) {
         if (!is.element(db, c("refseq", "genbank")))
-            stop("Unfortunately, only db = 'refseq' and db = 'genbank' 
+            stop("Unfortunately, only db = 'refseq' and db = 'genbank'
                  provide group information.")
-        
+
       kingdom <- tolower(kingdom)
-      
+
         if (!is.element(kingdom, c(getKingdoms(), "all")))
             stop(
-                "Please choose a kingdom that is supported by NCBI RefSeq or 
+                "Please choose a kingdom that is supported by NCBI RefSeq or
                 NCBI Genbank. See getKingdoms() for details.",
                 call. = FALSE
             )
-        
+
         organism_name <- group <- kingdoms <- subgroup <- NULL
-        
+
         listgenomes.data <-
             listGenomes(db = db,
                         type = "group",
                         details = TRUE)
-    
+
         if (kingdom != "all") {
             # case Animals
             if (is.element(kingdom,
@@ -78,7 +78,7 @@ listGroups <-
                             subgroup == "Mammals"
                         )
                 }
-                
+
                 if (kingdom == "invertebrate") {
                     group.y <- NULL
                     # filter for kingdom before groups are determined
@@ -95,23 +95,23 @@ listGroups <-
                             )
                         )
                 }
-                
+
                 if (kingdom == "vertebrate_other") {
-                  group.y <- NULL  
+                  group.y <- NULL
                   # filter for kingdom before groups are determined
                     listgenomes.data <-
                         dplyr::filter(
                             listgenomes.data,
                             kingdoms == "Eukaryota",
                             group.y == "Animals",
-                            subgroup %in% c("Amphibians", "Birds", "Fishes", 
+                            subgroup %in% c("Amphibians", "Birds", "Fishes",
                                             "Reptiles")
                         )
                 }
             }
             # case Plants
             if (is.element(kingdom, c("plant"))) {
-              group.y <- NULL  
+              group.y <- NULL
               # filter for kingdom before groups are determined
                 listgenomes.data <-
                     dplyr::filter(listgenomes.data,
@@ -120,7 +120,7 @@ listGroups <-
             }
             # case Fungi
             if (is.element(kingdom, c("fungi"))) {
-              group.y <- NULL  
+              group.y <- NULL
               # filter for kingdom before groups are determined
                 listgenomes.data <-
                     dplyr::filter(listgenomes.data,
@@ -129,7 +129,7 @@ listGroups <-
             }
             # case Protozoa
             if (is.element(kingdom, c("protozoa"))) {
-              group.y <- NULL  
+              group.y <- NULL
               # filter for kingdom before groups are determined
                 listgenomes.data <-
                     dplyr::filter(listgenomes.data,
@@ -155,23 +155,23 @@ listGroups <-
                 listgenomes.data <-
                     dplyr::filter(listgenomes.data, kingdoms == "Archaea")
             }
-            
+
             # change only first character to upper upper case
             #kingdom <- toupper_first_char(kingdom)
-            
+
             if (nrow(listgenomes.data) == 0)
                 stop("Unfortunately, no group is available for ",
                      kingdom,
                      ".",
                      call. = FALSE)
         }
-        
+
         uniq.species <-
             dplyr::summarise(
                 dplyr::group_by(listgenomes.data, organism_name, subgroup),
                 unique_elements = dplyr::n_distinct(organism_name)
             )
-        
+
         if (!details) {
             return(table(uniq.species$subgroup))
         } else {

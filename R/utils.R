@@ -28,7 +28,8 @@ getTMPFile <- function(file.name){
 #' @noRd
 gunzip_and_check <- function(file, gunzip = FALSE,
                              remove_annotation_outliers = FALSE, format,
-                             mute_citation = FALSE) {
+                             mute_citation = FALSE, overwrite = TRUE,
+                             remove = TRUE) {
   final_path <- file
   if (gunzip) {
     final_path <- unlist(stringr::str_replace(final_path, "[.]gz", ""))
@@ -41,7 +42,8 @@ gunzip_and_check <- function(file, gunzip = FALSE,
 
   if (gunzip) {
     message("-> Unzipping downloaded file ...")
-    R.utils::gunzip(file, destname = final_path)
+    R.utils::gunzip(file, destname = final_path, overwrite = overwrite,
+                    remove = remove)
   }
   if (format == "gff3") {
     output_path <- check_annotation_biomartr(final_path, remove_annotation_outliers)
@@ -146,4 +148,76 @@ supported_biotypes <- function(db) {
     bioTypes <- c(bioTypes, c(gtf = "gff"))
   }
   return(bioTypes)
+}
+
+validate_db_type_pair <- function(db, kingdom, type, combine,
+                                    group = NULL) {
+  if (type == "assembly_stats") type <- "assemblystats"
+  if (type == "repeat_masker") type <- "rm"
+  subfolders <- getKingdoms(db = db)
+  if (!is.element(kingdom, subfolders))
+    stop(paste0(
+      "Please select a valid kingdom: ",
+      paste0(subfolders, collapse = ", ")
+    ), call. = FALSE)
+
+  if (!is.null(group))
+    if (!is.element(group, getGroups(kingdom = kingdom, db = db)))
+      stop(
+        "Please specify a group that is supported by getGroups().
+                Your specification '",
+        group,
+        "' does not exist in getGroups(kingdom = '",
+        kingdom,
+        "', db = '",
+        db,
+        "'). Maybe you used a different db argument in getGroups()?",
+        call. = FALSE
+      )
+
+  if (!is.element(type,
+                  c("genome", "proteome", "CDS","cds", "gff",
+                    "rna", "assembly_stats","assemblystats", "gtf", "rm",
+                    "repeat_masker")))
+    stop(
+      "Please choose either type: type = 'genome', type = 'proteome',
+        type = 'CDS', type = 'gff', type = 'gtf',
+        type = 'rna', type = 'rm', or type = 'assembly_stats'.",
+      call. = FALSE
+    )
+
+
+  if (!is.element(db, c("refseq", "genbank", "ensembl")))
+    stop(
+      "Please select einter db = 'refseq', db = 'genbank', or
+            db = 'ensembl'.",
+      call. = FALSE
+    )
+
+  if ((stringr::str_to_upper(type) == "CDS") && (db == "genbank"))
+    stop("Genbank does not store CDS data. Please choose 'db = 'refseq''.",
+         call. = FALSE)
+
+  if ((type == "gtf") && (is.element(db, c("genbank", "refseq"))))
+    stop("GTF files are only available for type = 'ensembl' and type = 'ensemblgebomes'.")
+
+  if (type == "assemblystats" &&
+      !is.element(db, c("refseq", "genbank")))
+    stop(
+      "Unfortunately, assembly stats files are only available for
+            db = 'refseq' and db = 'genbank'.",
+      call. = FALSE
+    )
+
+  if (combine && type != "assemblystats")
+    stop(
+      "Only option type = 'assemblystats' can use combine = TRUE. Please
+            specify: type = 'assemblystats' and combine = TRUE.",
+      call. = FALSE
+    )
+
+  if ((type %in% c("rm", "repeat_masker")) && (!is.element(db, c("refseq", "genbank"))))
+    stop("Repeat Masker output files can only be retrieved from 'refseq'",
+         " or 'genbank'.", call. = FALSE)
+  return(type)
 }

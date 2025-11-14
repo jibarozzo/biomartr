@@ -54,7 +54,8 @@ for further exploration.}
 Usually keep this false, to make ut run much faster. Only set to TRUE, if you
 believe you cache is outdated (Species only exist in newest release etc)}
 
-\item{format}{"gff3", alternative "gtf" for ensembl.}
+\item{format}{character, For annotation: default: "gff3", alternative "gtf" for ensembl.\cr
+For assembly_stats, alternatives "download" / "txt" (download only), "import" import dataset.}
 
 \item{path}{character, default location is paste0("set_", toupper(set_type))}
 

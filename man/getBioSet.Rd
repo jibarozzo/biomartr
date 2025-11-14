@@ -84,7 +84,8 @@ and in such cases, the 'toplevel file is used.
 For more details see:
 \href{https://grch37.ensembl.org/info/genome/genebuild/assembly.html}{ensembl tutorial}}
 
-\item{format}{"gff3", alternative "gtf" for ensembl.}
+\item{format}{character, For annotation: default: "gff3", alternative "gtf" for ensembl.\cr
+For assembly_stats, alternatives "download" / "txt" (download only), "import" import dataset.}
 
 \item{mute_citation}{logical, default FALSE, indicating whether citation message should be muted.}
 }

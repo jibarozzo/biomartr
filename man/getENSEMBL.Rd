@@ -35,7 +35,8 @@ if the standard format before that.}
 
 \item{path}{location where file shall be stored.}
 
-\item{format}{"gff3", alternative "gtf" for ensembl.}
+\item{format}{character, For annotation: default: "gff3", alternative "gtf" for ensembl.\cr
+For assembly_stats, alternatives "download" / "txt" (download only), "import" import dataset.}
 }
 \value{
 either a character path to downloaded file, or a logical FALSE, specifying failure.
