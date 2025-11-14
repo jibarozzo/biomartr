@@ -3,6 +3,8 @@
 
 ### New features
 
+- Reintroduction of the `clean.retrieval()` function #123 thanks to @Roleren
+
 #### GTF support for refseq and genbank
 - Complete rewrite of curate.metadata to follow the API used by the rest of 
 the package. It now also works with clean.retrieval as it used to. 
