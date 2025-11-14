@@ -111,8 +111,7 @@ getAssemblyStats <-
                                             format = "assembly_stats",
                                             mute_citation = mute_citation)
     if (type == "import" & assembly_file != "Not available") {
-      assembly_stats_file <- read_assemblystats(assembly_file, type = "stats")
-      assembly_file <- dplyr::bind_cols(tibble::tibble(species = organism), assembly_stats_file)
+      assembly_file <- read_assemblystats(assembly_file, type = "stats", organism)
     }
     return(assembly_file)
   }

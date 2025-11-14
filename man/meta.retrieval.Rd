@@ -10,26 +10,32 @@ meta.retrieval(
   group = NULL,
   type = "genome",
   restart_at_last = TRUE,
+  max_species = NULL,
   reference = FALSE,
   combine = FALSE,
-  path = NULL
+  path = kingdom,
+  release = NULL,
+  remove_annotation_outliers = FALSE,
+  analyse_genome = FALSE,
+  assembly_type = "toplevel",
+  skip_bacteria = FALSE,
+  mute_citation = FALSE
 )
 }
 \arguments{
 \item{db}{a character string specifying the database from which the genome
 shall be retrieved:
-
 \itemize{
 \item \code{db = "refseq"}
 \item \code{db = "genbank"}
-\item \code{db = "emsembl"}
+\item \code{db = "ensembl"}
 }}
 
 \item{kingdom}{a character string specifying the kingdom of the organisms
 of interest, e.g.
 
 \itemize{
-\item For \code{NCBI RefSeq}:
+\item For \code{NCBI RefSeq / Genbank}:
 \itemize{
 \item \code{kingdom = "archaea"}
 \item \code{kingdom = "bacteria"}
@@ -38,17 +44,6 @@ of interest, e.g.
 \item \code{kingdom = "plant"}
 \item \code{kingdom = "protozoa"}
 \item \code{kingdom = "viral"}
-\item \code{kingdom = "vertebrate_mammalian"}
-\item \code{kingdom = "vertebrate_other"}
-}
-\item For \code{NCBI Genbank}:
-\itemize{
-\item \code{kingdom = "archaea"}
-\item \code{kingdom = "bacteria"}
-\item \code{kingdom = "fungi"}
-\item \code{kingdom = "invertebrate"}
-\item \code{kingdom = "plant"}
-\item \code{kingdom = "protozoa"}
 \item \code{kingdom = "vertebrate_mammalian"}
 \item \code{kingdom = "vertebrate_other"}
 }
@@ -84,10 +79,10 @@ Groups can be retrieved with \code{\link{getGroups}}.}
  ensemblgenomes); see also \code{\link{getGTF}})
  \item \code{type = "rna"} :
  (for RNA file retrieval in fasta format; see also \code{\link{getRNA}}),
- \item \code{type = "rm"} :
+ \item \code{type = "repeat_masker" or "rm"} :
  (for Repeat Masker output file retrieval; see also
  \code{\link{getRepeatMasker}}),
- \item \code{type = "assemblystats"} :
+ \item \code{type = "assembly_stats" or "assemblystats"} :
  (for genome assembly quality stats file retrieval;
  see also \code{\link{getAssemblyStats}}).
  }}
@@ -101,6 +96,9 @@ already downloaded organism files are corrupted or not by checking the md5 check
 organism files and check whether already downloaded organism files are corrupted or not by checking the md5 checksum.
 After checking existing files the function will start downloading all remaining organisms.
 }}
+
+\item{max_species}{NULL, else numeric, defining maximum number of species to use.
+If number specified is higher than total species in group, it will use the group size.}
 
 \item{reference}{a logical value indicating whether or not a genome shall be downloaded if it isn't marked in the database
 as either a reference genome or a representative genome. Options are:
@@ -116,6 +114,38 @@ assemby stats of individual species be imported and combined to a
 
 \item{path}{path to the folder in which downloaded genomes shall be stored.
 By default the kingdom name is used to name the output folder.}
+
+\item{release}{a numeric, the database release version of ENSEMBL (\code{db = "ensembl"}). Default is \code{release = NULL} meaning
+that the most recent database version is used. \code{release = 75} would for human would give the stable
+GRCh37 release in ensembl. Value must be > 46, since ensembl did not structure their data
+if the standard format before that.}
+
+\item{remove_annotation_outliers}{shall outlier lines be removed from the input \code{annotation_file}?
+If yes, then the initial \code{annotation_file} will be overwritten and the removed outlier lines will be stored at \code{\link{tempdir}}
+for further exploration.}
+
+\item{analyse_genome}{logical, default FALSE. If TRUE, get general genome statistics like
+gc content etc. For more details, see ?summary_genome}
+
+\item{assembly_type}{character, default c("primary_assembly", "toplevel"). Used for ensembl only,
+specifies the genome assembly type. Searches for both primary and toplevel, and if both are found, uses the
+first by order (so primary is prioritized by default).
+The Primary assembly should usually be used if it exists.
+The "primary assembly" contains all the top-level sequence regions,
+excluding alternative haplotypes and patches.
+If the primary assembly file is not present for a species
+(only defined for standard model organisms),
+that indicates that there were no haplotype/patch regions,
+and in such cases, the 'toplevel file is used.
+For more details see:
+\href{https://grch37.ensembl.org/info/genome/genebuild/assembly.html}{ensembl tutorial}}
+
+\item{skip_bacteria}{Due to its enormous dataset size (> 700MB as of July 2023),
+the bacterial summary file will not be loaded by default anymore. If users
+wish to gain insights for the bacterial kingdom they needs to actively specify \code{skip_bacteria = FALSE}. When \code{skip_bacteria = FALSE} is set then the
+bacterial summary file will be downloaded.}
+
+\item{mute_citation}{logical, default FALSE, indicating whether citation message should be muted.}
 }
 \value{
 a character vector storing the file paths of the retrieved files.
@@ -162,7 +192,7 @@ getGroups(db = "refseq", kingdom = "bacteria")
 # Now we choose the group Gammaproteobacteria and specify
 # the group argument in the meta.retrieval() function
 meta.retrieval(kingdom = "bacteria",
-   roup = "Gammaproteobacteria",
+   group = "Gammaproteobacteria",
    db = "refseq",
    type = "genome")
 }

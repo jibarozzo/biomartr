@@ -6,6 +6,8 @@
 #' @param type a tibble object, either \code{type = "raw"} to import the entire genome assembly
 #' stats file or \code{type = "stats"} to import overall statistics including
 #' all chromosomes, mitochondria and plastids.
+#' @param organism character, if not NULL, appends a column left side called 'species'
+#' with this value.
 #' @author Hajk-Georg Drost
 #' @details This function takes a string specifying the path to the Genome
 #' Assembly Stats file of interest (e.g. the path returned by
@@ -13,7 +15,7 @@
 #' @seealso \code{\link{getAssemblyStats}}, \code{\link{read_genome}},
 #' \code{\link{read_proteome}}, \code{\link{read_cds}}, \code{\link{read_gff}}
 #' @export
-read_assemblystats <- function(file, type = "raw") {
+read_assemblystats <- function(file, type = "raw", organism = NULL) {
 
 
     if (!is.element(type, c("raw", "stats")))
@@ -128,12 +130,11 @@ read_assemblystats <- function(file, type = "raw") {
                 top_level_count = ifelse(nrow(top.level.count) > 0,
                                          top.level.count$value, NA)
             )
-
-        return(assemblystats_file.all.features.short)
+        assemblystats_file <- assemblystats_file.all.features.short
     }
-
-    if (type == "raw") {
-        return(assemblystats_file)
+    if (!is.null(organism)) {
+        assemblystats_file <- dplyr::bind_cols(tibble::tibble(species = organism), assemblystats_file)
     }
+    return(assemblystats_file)
 }
 

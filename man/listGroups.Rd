@@ -7,22 +7,22 @@
 listGroups(db = "refseq", kingdom = "all", details = FALSE)
 }
 \arguments{
-\item{db}{a character string specifying the database for which genome 
+\item{db}{a character string specifying the database for which genome
 availability shall be checked. Available options are:
 \itemize{
-\item \code{db = "refseq"} 
+\item \code{db = "refseq"}
 \item \code{db = "genbank"}
 }}
 
-\item{kingdom}{a kingdom specification retrieved by 
+\item{kingdom}{a kingdom specification retrieved by
 \code{\link{getKingdoms}}.}
 
-\item{details}{shall all species corresponding to the specified 
+\item{details}{shall all species corresponding to the specified
 \code{kingdom} be returned? Default is \code{details = FALSE}.}
 }
 \description{
-Users can retrieve the available number of sequenced 
-genomes per group. Only available for \code{db = "refseq"} and 
+Users can retrieve the available number of sequenced
+genomes per group. Only available for \code{db = "refseq"} and
 \code{db = "genbank"}.
 }
 \examples{
@@ -45,7 +45,7 @@ listGroups(db = "genbank", kingdom = "bacteria")
 }
 }
 \seealso{
-\code{\link{listGenomes}}, \code{\link{is.genome.available}}, 
+\code{\link{listGenomes}}, \code{\link{is.genome.available}},
 \code{\link{listKingdoms}}
 }
 \author{

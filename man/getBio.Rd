@@ -39,7 +39,7 @@ there are three options to characterize an organism:
 }}
 
 \item{type}{biological sequence type. (alternatives are: genome, gff, cds,
-rna, proteome, assembly_stats, repeat_masker, collection (all the others))}
+rna, proteome, assembly_stats, repeat_masker (short version is 'rm') , collection (all the others))}
 
 \item{reference}{a logical value indicating whether or not a genome shall be a candidate for downloaded
 if it isn't marked in the database as either a reference genome or a representative genome.
@@ -83,7 +83,8 @@ and in such cases, the 'toplevel file is used.
 For more details see:
 \href{https://grch37.ensembl.org/info/genome/genebuild/assembly.html}{ensembl tutorial}}
 
-\item{format}{"gff3", alternative "gtf" for ensembl.}
+\item{format}{character, For annotation: default: "gff3", alternative "gtf" for ensembl.\cr
+For assembly_stats, alternatives "download" / "txt" (download only), "import" import dataset.}
 
 \item{mute_citation}{logical, default FALSE, indicating whether citation message should be muted.}
 }

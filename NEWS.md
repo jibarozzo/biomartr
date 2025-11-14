@@ -1,4 +1,11 @@
-# [biomartr 1.0.10]()
+
+# [biomartr 1.0.11](https://github.com/ropensci/biomartr/releases/tag/v1.0.11)
+
+### New features
+
+#### GTF support for refseq and genbank
+- Complete rewrite of curate.metadata to follow the API used by the rest of 
+the package. It now also works with clean.retrieval as it used to. 
 
 ### Bug fixes
 - fixing linking issue in `refseq_genbank_ftp_server_kingdoms_url()`

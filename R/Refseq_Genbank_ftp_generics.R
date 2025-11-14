@@ -79,13 +79,13 @@ select_assembly_refseq_genbank <- function(organism, AssemblyFilesAllKingdoms,
 
 ftp_url_refseq_genbank <- function(assembly, type) {
 
-  if (is.na(assembly) || is.na(assembly$ftp_path) || assembly$ftp_path == "") {
+  if (all(is.na(assembly)) || is.na(assembly$ftp_path) || assembly$ftp_path == "") {
     warning("No ftp path available for the selected organism. Please check with 'is.genome.available()' whether '$ftp_path' has a value.")
     return("Not available")
   } else {
-    
+
     stem_url <- paste0(assembly$ftp_path, "/", basename(assembly$ftp_path))
-    
+
     if (type == "genome") {
       url <- paste0(stem_url, "_genomic.fna.gz")
     } else if (type %in% c("gff", "gff3")) {
@@ -103,7 +103,7 @@ ftp_url_refseq_genbank <- function(assembly, type) {
     } else if (type == "repeat_masker") {
       url <- paste0(stem_url, "_rm.out.gz")
     } else stop("invalid refseq/genbank file type selected")
-    
+
     return(url)
   }
 }

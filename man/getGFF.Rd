@@ -60,7 +60,8 @@ the corresponding annotation file shall be stored. Default is
 
 \item{mute_citation}{logical, default FALSE, indicating whether citation message should be muted.}
 
-\item{format}{"gff3", alternative "gtf" for ensembl.}
+\item{format}{character, For annotation: default: "gff3", alternative "gtf" for ensembl.\cr
+For assembly_stats, alternatives "download" / "txt" (download only), "import" import dataset.}
 }
 \value{
 File path to downloaded genome.
